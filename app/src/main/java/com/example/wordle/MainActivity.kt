@@ -1,8 +1,14 @@
 package com.example.wordle
 
+import android.graphics.Color.rgb
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -29,11 +35,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /*
-    fun handleWordle(View: EditText, View: Button, View) {
-
-    }*/
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -56,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         var wordToGuess = correctWord.text
         var userGuess = keyboard.text
         var checkReturn = ""
-        var counter = 1
+        var counter = 0
 
         /**
          * Parameters / Fields:
@@ -86,6 +87,21 @@ class MainActivity : AppCompatActivity() {
             return result
         }
 
+        fun createSpannable(guess: String) : SpannableString {
+            val spanGuess = SpannableString(guess)
+            for (i in 0..3 ) {
+                if (checkReturn[i].toString() == "O") {
+                    spanGuess.setSpan(ForegroundColorSpan(-16711936), i, i+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+                else if (checkReturn[i].toString() == "X") {
+                    spanGuess.setSpan(ForegroundColorSpan(-65536), i, i+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+                else if (checkReturn[i].toString() == "+") {
+                    spanGuess.setSpan(ForegroundColorSpan(rgb(220,220,0)), i, i+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+            }
+            return spanGuess
+        }
 
         fun reset() {
             correctWord.setText(FourLetterWordList.getRandomFourLetterWord())
@@ -96,86 +112,79 @@ class MainActivity : AppCompatActivity() {
             correctTwo.setText("")
             correctThree.setText("")
             button.setText("Guess")
-            counter = 1
+            counter = 0
+            guessOneCheck.visibility = View.INVISIBLE
+            guessTwoCheck.visibility = View.INVISIBLE
+            guessThreeCheck.visibility = View.INVISIBLE
+            correctWord.visibility = View.INVISIBLE
+        }
 
-            button.setOnClickListener{
-                userGuess = keyboard.getText()
-                if(userGuess.toString().length != 4) {
-                    Toast.makeText(this, "Please enter a four letter word", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-                wordToGuess = correctWord.text
-                checkReturn = checkGuess(userGuess.toString().uppercase())
 
-                if (counter == 1) {
-                    userWordOne.setText(keyboard.text)
-                    correctOne.setText(checkReturn)
-                }
-                else if (counter == 2) {
-                    userWordTwo.setText(keyboard.text)
-                    correctTwo.setText(checkReturn)
-                }
-                else if (counter == 3) {
-                    userWordThree.setText(keyboard.text)
-                    correctThree.setText(checkReturn)
-                }
-                counter++
-                if (checkReturn == "OOOO" && counter <= 4) {
-                    //CONGRATS
-                    Toast.makeText(this, "Congratulations", Toast.LENGTH_SHORT).show()
-                    button.text = "Reset"
-                    button.setOnClickListener{
-                        reset()
-                    }
-                }
-                if (counter > 4) {
-                    Toast.makeText(this, "You've exceeded the maximum number of tries", Toast.LENGTH_SHORT).show()
+        fun wordle() {
+            userGuess = keyboard.getText()
+            wordToGuess = correctWord.text
+            checkReturn = checkGuess(userGuess.toString().uppercase())
+
+            if (counter == 0) {
+                userWordOne.setText(keyboard.text)
+                correctOne.setText(createSpannable(checkReturn), TextView.BufferType.SPANNABLE)
+                guessOneCheck.visibility = View.VISIBLE
+            }
+            else if (counter == 1) {
+                userWordTwo.setText(keyboard.text)
+                correctTwo.setText(createSpannable(checkReturn), TextView.BufferType.SPANNABLE)
+                guessTwoCheck.visibility = View.VISIBLE
+            }
+            else if (counter == 2) {
+                userWordThree.setText(keyboard.text)
+                correctThree.setText(createSpannable(checkReturn), TextView.BufferType.SPANNABLE)
+                guessThreeCheck.visibility = View.VISIBLE
+            }
+
+            counter++
+            // Got the correct word
+            if (checkReturn == "OOOO" && counter <= 3) {
+                //CONGRATS
+                Toast.makeText(this, "Congratulations", Toast.LENGTH_SHORT).show()
+                correctWord.visibility = View.VISIBLE
+                button.text = "Reset"
+                button.setOnClickListener{
                     reset()
+                    button.setOnClickListener{
+                        if(userGuess.toString().length != 4) {
+                            Toast.makeText(this, "Please enter a four letter word", Toast.LENGTH_SHORT).show()
+                            return@setOnClickListener
+                        }
+                        wordle()
+                    }
                 }
             }
 
+            // Used up all attempts
+            else if (counter == 3) {
+                Toast.makeText(this, "You've reached the maximum number of tries", Toast.LENGTH_SHORT).show()
+                correctWord.visibility = View.VISIBLE
+                button.text = "Reset"
+                button.setOnClickListener{
+                    reset()
+                    button.setOnClickListener{
+                        if(userGuess.toString().length != 4) {
+                            Toast.makeText(this, "Please enter a four letter word", Toast.LENGTH_SHORT).show()
+                            return@setOnClickListener
+                        }
+                        wordle()
+                    }
+                }
+            }
         }
-
         correctWord.setText(FourLetterWordList.getRandomFourLetterWord())
-
         button.setOnClickListener{
-            userGuess = keyboard.getText()
             if(userGuess.toString().length != 4) {
                 Toast.makeText(this, "Please enter a four letter word", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            wordToGuess = correctWord.text
-            checkReturn = checkGuess(userGuess.toString().uppercase())
-
-            if (counter == 1) {
-                userWordOne.setText(keyboard.text)
-                correctOne.setText(checkReturn)
-            }
-            else if (counter == 2) {
-                userWordTwo.setText(keyboard.text)
-                correctTwo.setText(checkReturn)
-            }
-            else if (counter == 3) {
-                userWordThree.setText(keyboard.text)
-                correctThree.setText(checkReturn)
-            }
-            counter++
-            if (checkReturn == "OOOO" && counter <= 4) {
-                //CONGRATS
-                Toast.makeText(this, "Congratulations", Toast.LENGTH_SHORT).show()
-                button.text = "Reset"
-                button.setOnClickListener{
-                    reset()
-                }
-            }
-            if (counter > 4) {
-                Toast.makeText(this, "You've exceeded the maximum number of tries", Toast.LENGTH_SHORT).show()
-                reset()
-            }
+            wordle()
         }
 
     }
-
-
-
 }
