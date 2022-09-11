@@ -1,21 +1,22 @@
 package com.example.wordle
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Color.rgb
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.github.jinatonic.confetti.CommonConfetti
 import com.google.android.material.textfield.TextInputEditText
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -59,6 +60,7 @@ class MainActivity : AppCompatActivity() {
         var wordToGuess = correctWord.text
         var userGuess = keyboard.text
         var checkReturn = ""
+        val viewGroup = findViewById<View>(android.R.id.content) as ViewGroup
         var counter = 0
 
         fun hideSoftKeyboard(view: View) {
@@ -157,11 +159,14 @@ class MainActivity : AppCompatActivity() {
             if (checkReturn == "OOOO" && counter <= 3) {
                 //CONGRATS
                 Toast.makeText(this, "Congratulations", Toast.LENGTH_SHORT).show()
+                //Store to terminate when button is pressed
+                var confetti = CommonConfetti.rainingConfetti(viewGroup, (intArrayOf(Color.GREEN, Color.BLUE))).infinite()
                 correctWord.visibility = View.VISIBLE
                 button.text = "Reset"
                 button.setOnClickListener{
                     hideSoftKeyboard(keyboard)
                     reset()
+                    confetti.terminate()
                     button.setOnClickListener{
                         if(userGuess.toString().length != 4) {
                             Toast.makeText(this, "Please enter a four letter word", Toast.LENGTH_SHORT).show()
@@ -175,9 +180,11 @@ class MainActivity : AppCompatActivity() {
             // Used up all attempts
             else if (counter == 3) {
                 Toast.makeText(this, "You've reached the maximum number of tries", Toast.LENGTH_SHORT).show()
+                //Store to terminate when button is pressed
                 correctWord.visibility = View.VISIBLE
                 button.text = "Reset"
                 button.setOnClickListener{
+                    hideSoftKeyboard(keyboard)
                     reset()
                     button.setOnClickListener{
                         if(userGuess.toString().length != 4) {
