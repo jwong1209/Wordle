@@ -1,5 +1,6 @@
 package com.example.wordle
 
+import android.content.Context
 import android.graphics.Color.rgb
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -59,6 +61,12 @@ class MainActivity : AppCompatActivity() {
         var checkReturn = ""
         var counter = 0
 
+        fun hideSoftKeyboard(view: View) {
+            val imm =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+
         /**
          * Parameters / Fields:
          *   wordToGuess : String - the target word the user is trying to guess
@@ -104,6 +112,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         fun reset() {
+            // reset TextViews to start another game
             correctWord.setText(FourLetterWordList.getRandomFourLetterWord())
             userWordOne.setText("")
             userWordTwo.setText("")
@@ -121,6 +130,8 @@ class MainActivity : AppCompatActivity() {
 
 
         fun wordle() {
+            // handles wordle game
+            hideSoftKeyboard(keyboard)
             userGuess = keyboard.getText()
             wordToGuess = correctWord.text
             checkReturn = checkGuess(userGuess.toString().uppercase())
@@ -149,6 +160,7 @@ class MainActivity : AppCompatActivity() {
                 correctWord.visibility = View.VISIBLE
                 button.text = "Reset"
                 button.setOnClickListener{
+                    hideSoftKeyboard(keyboard)
                     reset()
                     button.setOnClickListener{
                         if(userGuess.toString().length != 4) {
