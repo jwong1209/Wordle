@@ -26,7 +26,7 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+* [x] Added a check to prevent words that aren't length 4 from being entered
 
 ## Video Walkthrough
 
