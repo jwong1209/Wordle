@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -55,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         val correctTwo = findViewById<TextView>(R.id.correctTwo)
         val correctThree = findViewById<TextView>(R.id.correctThree)
         val correctWord = findViewById<TextView>(R.id.correctWord)
-        val keyboard = findViewById<TextInputEditText>(R.id.keyboard)
+        val keyboard = findViewById<EditText>(R.id.keyboard)
         val button = findViewById<Button>(R.id.button)
         var wordToGuess = correctWord.text
         var userGuess = keyboard.text

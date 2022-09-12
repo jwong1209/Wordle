@@ -167,19 +167,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.108" />
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/keyboard"
-        android:layout_width="233dp"
-        android:layout_height="55dp"
-        android:hint="Your Guess"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.095"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guessThreeCheck"
-        app:layout_constraintVertical_bias="0.539" />
-
     <Button
         android:id="@+id/button"
         android:layout_width="134dp"
@@ -188,8 +175,6 @@
         android:text="Guess"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/keyboard"
         app:layout_constraintTop_toBottomOf="@+id/correctThree"
         app:layout_constraintVertical_bias="0.516" />
 
@@ -205,7 +190,21 @@
         app:layout_constraintEnd_toEndOf="@+id/correctThree"
         app:layout_constraintHorizontal_bias="0.479"
         app:layout_constraintStart_toStartOf="@+id/guessThreeCheck"
-        app:layout_constraintTop_toBottomOf="@+id/correctThree"
-        app:layout_constraintVertical_bias="0.305" />
+        app:layout_constraintTop_toBottomOf="@+id/correctThree" />
+
+    <EditText
+        android:id="@+id/keyboard"
+        android:layout_width="232dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="96dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text=""
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintHorizontal_bias="0.724"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guessThreeCheck"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
