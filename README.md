@@ -26,7 +26,7 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-* [x] Added a check to prevent words that aren't length 4 from being entered
+* [x] User can use a Popup Menu to choose between 3 word lists. 
 
 ## Video Walkthrough
 
