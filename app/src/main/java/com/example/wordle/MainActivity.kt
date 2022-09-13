@@ -118,7 +118,7 @@ class MainActivity : AppCompatActivity() {
 
         /**
          * Descripton: Updates streak based on outcome. If user guessed correctly, then increment by
-         *             1 and if user guessED incorrectly, set streak to 0
+         *             1 and if user guessed incorrectly, set streak to 0
          * Parameters:
          *   outcome: String - the outcome of the game. Either "WIN" or "LOSS".
          * */
