@@ -7,63 +7,51 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.wordle.FourLetterWordList.getRandomFourLetterWord
 import com.github.jinatonic.confetti.CommonConfetti
-import com.google.android.material.textfield.TextInputEditText
+import com.github.jinatonic.confetti.ConfettiManager
 
 
 class MainActivity : AppCompatActivity() {
-
-    object FourLetterWordList {
-        // List of most common 4 letter words from: https://7esl.com/4-letter-words/
-        val fourLetterWords =
-        "Area,Army,Baby,Back,Ball,Band,Bank,Base,Bill,Body,Book,Call,Card,Care,Case,Cash,City,Club,Cost,Date,Deal,Door,Duty,East,Edge,Face,Fact,Farm,Fear,File,Film,Fire,Firm,Fish,Food,Foot,Form,Fund,Game,Girl,Goal,Gold,Hair,Half,Hall,Hand,Head,Help,Hill,Home,Hope,Hour,Idea,Jack,John,Kind,King,Lack,Lady,Land,Life,Line,List,Look,Lord,Loss,Love,Mark,Mary,Mind,Miss,Move,Name,Need,News,Note,Page,Pain,Pair,Park,Part,Past,Path,Paul,Plan,Play,Post,Race,Rain,Rate,Rest,Rise,Risk,Road,Rock,Role,Room,Rule,Sale,Seat,Shop,Show,Side,Sign,Site,Size,Skin,Sort,Star,Step,Task,Team,Term,Test,Text,Time,Tour,Town,Tree,Turn,Type,Unit,User,View,Wall,Week,West,Wife,Will,Wind,Wine,Wood,Word,Work,Year,Bear,Beat,Blow,Burn,Call,Care,Cast,Come,Cook,Cope,Cost,Dare,Deal,Deny,Draw,Drop,Earn,Face,Fail,Fall,Fear,Feel,Fill,Find,Form,Gain,Give,Grow,Hang,Hate,Have,Head,Hear,Help,Hide,Hold,Hope,Hurt,Join,Jump,Keep,Kill,Know,Land,Last,Lead,Lend,Lift,Like,Link,Live,Look,Lose,Love,Make,Mark,Meet,Mind,Miss,Move,Must,Name,Need,Note,Open,Pass,Pick,Plan,Play,Pray,Pull,Push,Read,Rely,Rest,Ride,Ring,Rise,Risk,Roll,Rule,Save,Seek,Seem,Sell,Send,Shed,Show,Shut,Sign,Sing,Slip,Sort,Stay,Step,Stop,Suit,Take,Talk,Tell,Tend,Test,Turn,Vary,View,Vote,Wait,Wake,Walk,Want,Warn,Wash,Wear,Will,Wish,Work,Able,Back,Bare,Bass,Blue,Bold,Busy,Calm,Cold,Cool,Damp,Dark,Dead,Deaf,Dear,Deep,Dual,Dull,Dumb,Easy,Evil,Fair,Fast,Fine,Firm,Flat,Fond,Foul,Free,Full,Glad,Good,Grey,Grim,Half,Hard,Head,High,Holy,Huge,Just,Keen,Kind,Last,Late,Lazy,Like,Live,Lone,Long,Loud,Main,Male,Mass,Mean,Mere,Mild,Nazi,Near,Neat,Next,Nice,Okay,Only,Open,Oral,Pale,Past,Pink,Poor,Pure,Rare,Real,Rear,Rich,Rude,Safe,Same,Sick,Slim,Slow,Soft,Sole,Sore,Sure,Tall,Then,Thin,Tidy,Tiny,Tory,Ugly,Vain,Vast,Very,Vice,Warm,Wary,Weak,Wide,Wild,Wise,Zero,Ably,Afar,Anew,Away,Back,Dead,Deep,Down,Duly,Easy,Else,Even,Ever,Fair,Fast,Flat,Full,Good,Half,Hard,Here,High,Home,Idly,Just,Late,Like,Live,Long,Loud,Much,Near,Nice,Okay,Once,Only,Over,Part,Past,Real,Slow,Solo,Soon,Sure,That,Then,This,Thus,Very,When,Wide"
-
-        // Returns a list of four letter words as a list
-        fun getAllFourLetterWords(): List<String> {
-            return fourLetterWords.split(",")
-        }
-
-        // Returns a random four letter word from the list in all caps
-        fun getRandomFourLetterWord(): String {
-            val allWords = getAllFourLetterWords()
-            val randomNumber = (0..allWords.size).shuffled().last()
-            return allWords[randomNumber].uppercase()
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val guessOne = findViewById<TextView>(R.id.guessOne)
-        val guessOneCheck = findViewById<TextView>(R.id.guessOneCheck)
-        val guessTwo = findViewById<TextView>(R.id.guessTwo)
-        val guessTwoCheck = findViewById<TextView>(R.id.guessTwoCheck)
-        val guessThree = findViewById<TextView>(R.id.guessThree)
-        val guessThreeCheck = findViewById<TextView>(R.id.guessThreeCheck)
+        val checkOne = findViewById<TextView>(R.id.checkOne)
+        val checkTwo = findViewById<TextView>(R.id.checkTwo)
+        val checkThree = findViewById<TextView>(R.id.checkThree)
         val userWordOne = findViewById<TextView>(R.id.userWordOne)
         val userWordTwo = findViewById<TextView>(R.id.userWordTwo)
         val userWordThree = findViewById<TextView>(R.id.userWordThree)
-        val correctOne = findViewById<TextView>(R.id.correctOne)
-        val correctTwo = findViewById<TextView>(R.id.correctTwo)
-        val correctThree = findViewById<TextView>(R.id.correctThree)
-        val correctWord = findViewById<TextView>(R.id.correctWord)
+        val userCheckOne = findViewById<TextView>(R.id.userCheckOne)
+        val userCheckTwo = findViewById<TextView>(R.id.userCheckTwo)
+        val userCheckThree = findViewById<TextView>(R.id.userCheckThree)
+        val correctWordTextView = findViewById<TextView>(R.id.correctWordTextView)
         val keyboard = findViewById<EditText>(R.id.keyboard)
-        val button = findViewById<Button>(R.id.button)
-        var wordToGuess = correctWord.text
+        val guessButton = findViewById<Button>(R.id.guessButton)
+        val streakView = findViewById<TextView>(R.id.streakView)
+        val filterButton = findViewById<Button>(R.id.button)
+        var wordToGuess = correctWordTextView.text
         var userGuess = keyboard.text
-        var checkReturn = ""
+        var checkGuessReturn = ""
         val viewGroup = findViewById<View>(android.R.id.content) as ViewGroup
-        var counter = 0
+        var attemptCounter = 0
+        var streakCounter = 0
+        var wordListID = 0
+        var confetti : ConfettiManager? = null
 
+        /**
+         * Description: Hides soft keyboard
+         * Parameters:
+         *   view : View - View to be hidden
+         * */
         fun hideSoftKeyboard(view: View) {
             val imm =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -81,8 +69,7 @@ class MainActivity : AppCompatActivity() {
          *   'X' represents a letter not in the target word
          */
         fun checkGuess(guess: String) : String {
-            System.out.println(guess)
-            System.out.println(wordToGuess)
+            println("Word to Guess: " + wordToGuess)
             var result = ""
             for (i in 0..3) {
                 if (guess[i] == wordToGuess[i]) {
@@ -98,113 +85,197 @@ class MainActivity : AppCompatActivity() {
             return result
         }
 
+        /**
+         * Description: Creates a colored SpannableString for provided String.
+         * Parameters:
+         *   guess: String - string made up of O,X, and + that needs to be colored green, red, or
+         *                   yellow
+         * Returns a SpannableString of Green, Red, and Yellow where:
+         *   O = Green
+         *   X = Red
+         *   + = Yellow
+         * */
         fun createSpannable(guess: String) : SpannableString {
             val spanGuess = SpannableString(guess)
             for (i in 0..3 ) {
-                if (checkReturn[i].toString() == "O") {
-                    spanGuess.setSpan(ForegroundColorSpan(-16711936), i, i+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                if (checkGuessReturn[i].toString() == "O") {
+                    // set color to green
+                    spanGuess.setSpan(ForegroundColorSpan(rgb(0,255,0)),
+                        i, i+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
-                else if (checkReturn[i].toString() == "X") {
-                    spanGuess.setSpan(ForegroundColorSpan(-65536), i, i+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                else if (checkGuessReturn[i].toString() == "X") {
+                    // set color to red
+                    spanGuess.setSpan(ForegroundColorSpan(rgb(255,0,0)),
+                        i, i+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
-                else if (checkReturn[i].toString() == "+") {
-                    spanGuess.setSpan(ForegroundColorSpan(rgb(220,220,0)), i, i+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                else if (checkGuessReturn[i].toString() == "+") {
+                    // set color to yellow
+                    spanGuess.setSpan(ForegroundColorSpan(rgb(220,220,0)),
+                        i, i+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             }
             return spanGuess
         }
 
+        /**
+         * Descripton: Updates streak based on outcome. If user guessed correctly, then increment by
+         *             1 and if user guessED incorrectly, set streak to 0
+         * Parameters:
+         *   outcome: String - the outcome of the game. Either "WIN" or "LOSS".
+         * */
+        fun updateStreak(outcome: String) {
+            if (outcome == "WIN") {
+                streakCounter++
+            }
+            else {
+                streakCounter = 0
+            }
+            streakView.setText("Word Streak: " + streakCounter)
+        }
+
+        /**
+         * Description: Resets the text in relavant TextViews to blank and sets visibiltiy of
+         *              relevant TextViews to be invisible
+         * */
         fun reset() {
             // reset TextViews to start another game
-            correctWord.setText(FourLetterWordList.getRandomFourLetterWord())
+            correctWordTextView.setText(getRandomFourLetterWord(wordListID))
+            println(correctWordTextView.getText())
             userWordOne.setText("")
             userWordTwo.setText("")
             userWordThree.setText("")
-            correctOne.setText("")
-            correctTwo.setText("")
-            correctThree.setText("")
-            button.setText("Guess")
-            counter = 0
-            guessOneCheck.visibility = View.INVISIBLE
-            guessTwoCheck.visibility = View.INVISIBLE
-            guessThreeCheck.visibility = View.INVISIBLE
-            correctWord.visibility = View.INVISIBLE
+            userCheckOne.setText("")
+            userCheckTwo.setText("")
+            userCheckThree.setText("")
+            guessButton.setText("Guess")
+            keyboard.setText("")
+            attemptCounter = 0
+            checkOne.visibility = View.INVISIBLE
+            checkTwo.visibility = View.INVISIBLE
+            checkThree.visibility = View.INVISIBLE
+            correctWordTextView.visibility = View.INVISIBLE
         }
 
-
+        /**
+         * Description: Handles game of Wordle
+         * */
         fun wordle() {
-            // handles wordle game
-            hideSoftKeyboard(keyboard)
             userGuess = keyboard.getText()
-            wordToGuess = correctWord.text
-            checkReturn = checkGuess(userGuess.toString().uppercase())
+            // if statement for checking that word is length 4
+            if(userGuess.length != 4) {
+                Toast.makeText(this, "Please enter a four letter word",
+                    Toast.LENGTH_SHORT).show()
+                return
+            }
+            hideSoftKeyboard(keyboard)
+            wordToGuess = correctWordTextView.text
+            checkGuessReturn = checkGuess(userGuess.toString().uppercase())
 
-            if (counter == 0) {
+            // update related TextViews based on which attempt user is on
+            if (attemptCounter == 0) {
                 userWordOne.setText(keyboard.text)
-                correctOne.setText(createSpannable(checkReturn), TextView.BufferType.SPANNABLE)
-                guessOneCheck.visibility = View.VISIBLE
-            }
-            else if (counter == 1) {
+                userCheckOne.setText(createSpannable(checkGuessReturn), TextView.BufferType.SPANNABLE)
+                checkOne.visibility = View.VISIBLE
+            } else if (attemptCounter == 1) {
                 userWordTwo.setText(keyboard.text)
-                correctTwo.setText(createSpannable(checkReturn), TextView.BufferType.SPANNABLE)
-                guessTwoCheck.visibility = View.VISIBLE
-            }
-            else if (counter == 2) {
+                userCheckTwo.setText(createSpannable(checkGuessReturn), TextView.BufferType.SPANNABLE)
+                checkTwo.visibility = View.VISIBLE
+            } else if (attemptCounter == 2) {
                 userWordThree.setText(keyboard.text)
-                correctThree.setText(createSpannable(checkReturn), TextView.BufferType.SPANNABLE)
-                guessThreeCheck.visibility = View.VISIBLE
+                userCheckThree.setText(createSpannable(checkGuessReturn), TextView.BufferType.SPANNABLE)
+                checkThree.visibility = View.VISIBLE
             }
 
-            counter++
-            // Got the correct word
-            if (checkReturn == "OOOO" && counter <= 3) {
-                //CONGRATS
+            keyboard.setText("")
+            attemptCounter++
+
+            // User guessed correct word
+            if (checkGuessReturn == "OOOO" && attemptCounter <= 3) {
                 Toast.makeText(this, "Congratulations", Toast.LENGTH_SHORT).show()
-                //Store to terminate when button is pressed
-                var confetti = CommonConfetti.rainingConfetti(viewGroup, (intArrayOf(Color.GREEN, Color.BLUE))).infinite()
-                correctWord.visibility = View.VISIBLE
-                button.text = "Reset"
-                button.setOnClickListener{
+                //Store ConfettiManager object to terminate confetti animation when reset button pressed
+                confetti = CommonConfetti.rainingConfetti(viewGroup,
+                    (intArrayOf(Color.GREEN, Color.BLUE))).infinite()
+                correctWordTextView.visibility = View.VISIBLE
+                updateStreak("WIN")
+                guessButton.setText("Reset")
+                guessButton.setOnClickListener{
                     hideSoftKeyboard(keyboard)
                     reset()
-                    confetti.terminate()
-                    button.setOnClickListener{
-                        if(userGuess.toString().length != 4) {
-                            Toast.makeText(this, "Please enter a four letter word", Toast.LENGTH_SHORT).show()
-                            return@setOnClickListener
-                        }
+                    if (confetti != null) {
+                        confetti?.terminate()
+                    }
+                    guessButton.setOnClickListener{
                         wordle()
                     }
                 }
             }
 
             // Used up all attempts
-            else if (counter == 3) {
-                Toast.makeText(this, "You've reached the maximum number of tries", Toast.LENGTH_SHORT).show()
-                //Store to terminate when button is pressed
-                correctWord.visibility = View.VISIBLE
-                button.text = "Reset"
-                button.setOnClickListener{
+            else if (attemptCounter == 3) {
+                println("Used up all attempts")
+                Toast.makeText(this, "You've reached the maximum number of tries",
+                                Toast.LENGTH_SHORT).show()
+                correctWordTextView.visibility = View.VISIBLE
+                guessButton.setText("Reset")
+                updateStreak("LOSS")
+                guessButton.setOnClickListener{
                     hideSoftKeyboard(keyboard)
                     reset()
-                    button.setOnClickListener{
-                        if(userGuess.toString().length != 4) {
-                            Toast.makeText(this, "Please enter a four letter word", Toast.LENGTH_SHORT).show()
-                            return@setOnClickListener
-                        }
+                    guessButton.setOnClickListener{
                         wordle()
                     }
                 }
             }
         }
-        correctWord.setText(FourLetterWordList.getRandomFourLetterWord())
-        button.setOnClickListener{
-            if(userGuess.toString().length != 4) {
-                Toast.makeText(this, "Please enter a four letter word", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            wordle()
+
+        /**
+         * Description: Handles popup menu
+         * Parameters:
+         *   view: View - View where popup will be connected to
+         * */
+        fun showPopup(view: View) {
+            val popup = PopupMenu(this, view)
+            // Inflate the menu from xml
+            popup.inflate(R.menu.popup_filters)
+            popup.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item: MenuItem? ->
+                // Handle menu item selection
+                when (item!!.itemId) {
+                    R.id.defaultWords -> {
+                        wordListID = 0
+                    }
+                    R.id.places -> {
+                        wordListID = 1
+                    }
+                    R.id.animals -> {
+                        wordListID = 2
+                    }
+                }
+                // Reseting for new round of wordle
+                hideSoftKeyboard(keyboard)
+                reset()
+                if (confetti != null) {
+                    confetti?.terminate()
+                }
+                guessButton.setOnClickListener{
+                    wordle()
+                }
+                true
+            })
+
+            popup.show()
         }
 
+        // Beginning of game, get random word to be guessed
+        correctWordTextView.setText(getRandomFourLetterWord(wordListID))
+        println(correctWordTextView.getText())
+
+        filterButton.setOnClickListener{
+            showPopup(filterButton)
+        }
+
+        // Begin Wordle when "Guess" button is clicked
+        guessButton.setOnClickListener{
+            wordle()
+        }
     }
 }

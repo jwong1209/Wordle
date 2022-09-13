@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/correctThree"
+        android:id="@+id/userCheckThree"
         android:layout_width="130dp"
         android:layout_height="51dp"
         android:text=""
@@ -15,7 +15,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.76"
-        app:layout_constraintStart_toEndOf="@+id/guessThreeCheck"
+        app:layout_constraintStart_toEndOf="@+id/checkThree"
         app:layout_constraintTop_toBottomOf="@+id/userWordThree"
         app:layout_constraintVertical_bias="0.086" />
 
@@ -30,11 +30,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/guessThree"
-        app:layout_constraintTop_toBottomOf="@+id/correctTwo"
+        app:layout_constraintTop_toBottomOf="@+id/userCheckTwo"
         app:layout_constraintVertical_bias="0.078" />
 
     <TextView
-        android:id="@+id/correctTwo"
+        android:id="@+id/userCheckTwo"
         android:layout_width="130dp"
         android:layout_height="51dp"
         android:layout_marginEnd="28dp"
@@ -43,7 +43,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/guessTwoCheck"
+        app:layout_constraintStart_toEndOf="@+id/checkTwo"
         app:layout_constraintTop_toBottomOf="@+id/userWordTwo"
         app:layout_constraintVertical_bias="0.063" />
 
@@ -57,11 +57,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.735"
         app:layout_constraintStart_toEndOf="@+id/guessTwo"
-        app:layout_constraintTop_toBottomOf="@+id/correctOne"
+        app:layout_constraintTop_toBottomOf="@+id/userCheckOne"
         app:layout_constraintVertical_bias="0.043" />
 
     <TextView
-        android:id="@+id/correctOne"
+        android:id="@+id/userCheckOne"
         android:layout_width="130dp"
         android:layout_height="51dp"
         android:text=""
@@ -69,7 +69,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.735"
-        app:layout_constraintStart_toEndOf="@+id/guessOneCheck"
+        app:layout_constraintStart_toEndOf="@+id/checkOne"
         app:layout_constraintTop_toBottomOf="@+id/userWordOne"
         app:layout_constraintVertical_bias="0.043" />
 
@@ -81,13 +81,13 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.735"
+        app:layout_constraintHorizontal_bias="0.76"
         app:layout_constraintStart_toEndOf="@+id/guessOne"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.108" />
+        app:layout_constraintVertical_bias="0.144" />
 
     <TextView
-        android:id="@+id/guessThreeCheck"
+        android:id="@+id/checkThree"
         android:layout_width="130dp"
         android:layout_height="51dp"
         android:text="Check #3:"
@@ -98,7 +98,7 @@
         app:layout_constraintHorizontal_bias="0.12"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guessThree"
-        app:layout_constraintVertical_bias="0.087" />
+        app:layout_constraintVertical_bias="0.086" />
 
     <TextView
         android:id="@+id/guessThree"
@@ -110,11 +110,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.12"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guessTwoCheck"
+        app:layout_constraintTop_toBottomOf="@+id/checkTwo"
         app:layout_constraintVertical_bias="0.079" />
 
     <TextView
-        android:id="@+id/guessTwoCheck"
+        android:id="@+id/checkTwo"
         android:layout_width="130dp"
         android:layout_height="51dp"
         android:text="Check #2:"
@@ -137,11 +137,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.12"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guessOneCheck"
+        app:layout_constraintTop_toBottomOf="@+id/checkOne"
         app:layout_constraintVertical_bias="0.045" />
 
     <TextView
-        android:id="@+id/guessOneCheck"
+        android:id="@+id/checkOne"
         android:layout_width="130dp"
         android:layout_height="51dp"
         android:text="Check #1:"
@@ -165,21 +165,21 @@
         app:layout_constraintHorizontal_bias="0.12"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.108" />
+        app:layout_constraintVertical_bias="0.144" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/guessButton"
         android:layout_width="134dp"
         android:layout_height="48dp"
         android:layout_marginEnd="16dp"
         android:text="Guess"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/correctThree"
-        app:layout_constraintVertical_bias="0.516" />
+        app:layout_constraintTop_toBottomOf="@+id/userCheckThree"
+        app:layout_constraintVertical_bias="0.574" />
 
     <TextView
-        android:id="@+id/correctWord"
+        android:id="@+id/correctWordTextView"
         android:layout_width="182dp"
         android:layout_height="37dp"
         android:gravity="center"
@@ -187,10 +187,10 @@
         android:textSize="20sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/keyboard"
-        app:layout_constraintEnd_toEndOf="@+id/correctThree"
+        app:layout_constraintEnd_toEndOf="@+id/userCheckThree"
         app:layout_constraintHorizontal_bias="0.479"
-        app:layout_constraintStart_toStartOf="@+id/guessThreeCheck"
-        app:layout_constraintTop_toBottomOf="@+id/correctThree" />
+        app:layout_constraintStart_toStartOf="@+id/checkThree"
+        app:layout_constraintTop_toBottomOf="@+id/userCheckThree" />
 
     <EditText
         android:id="@+id/keyboard"
@@ -200,11 +200,39 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:text=""
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button"
+        app:layout_constraintEnd_toStartOf="@+id/guessButton"
         app:layout_constraintHorizontal_bias="0.724"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guessThreeCheck"
+        app:layout_constraintTop_toBottomOf="@+id/checkThree"
         app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/streakView"
+        android:layout_width="151dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
+        android:text="Word Streak: 0"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/guessOne"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.034"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.272" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Theme"
+        app:layout_constraintBottom_toTopOf="@+id/userWordOne"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.592"
+        app:layout_constraintStart_toEndOf="@+id/streakView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.32" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
