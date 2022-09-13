@@ -4,7 +4,7 @@ Submitted by: **Wordle**
 
 **Wordle** is an android app that recreates a simple version of the popular word game [Wordle](https://www.nytimes.com/games/wordle/index.html). 
 
-Time spent: **12** hours spent in total
+Time spent: **14** hours spent in total
 
 ## Required Features
 
@@ -17,12 +17,12 @@ The following **required** functionality is completed:
 
 The following **optional** features are implemented:
 
-- [ ] User can toggle betweeen different word lists
+- [x] User can toggle betweeen different word lists
 - [x] User can see the 'correctness' of their guess through colors on the word 
 - [x] User sees a visual change after guessing the correct word
 - [x] User can tap a 'Reset' button to get a new word and clear previous guesses
 - [x] User will get an error message if they input an invalid guess
-- [ ] User can see a 'streak' record of how many words they've guessed correctly.
+- [x] User can see a 'streak' record of how many words they've guessed correctly.
 
 The following **additional** features are implemented:
 
