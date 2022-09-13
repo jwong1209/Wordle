@@ -42,8 +42,7 @@ GIF created with ...
 [peek](https://github.com/phw/peek) for Linux. -->
 
 ## Notes
-
-Describe any challenges encountered while building the app.
+I had difficulty implementing the Popup Menu but CodePath's guide on it was useful. 
 
 ## License
 
