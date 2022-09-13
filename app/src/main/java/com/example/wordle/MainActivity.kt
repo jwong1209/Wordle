@@ -69,7 +69,6 @@ class MainActivity : AppCompatActivity() {
          *   'X' represents a letter not in the target word
          */
         fun checkGuess(guess: String) : String {
-            println("Word to Guess: " + wordToGuess)
             var result = ""
             for (i in 0..3) {
                 if (guess[i] == wordToGuess[i]) {
@@ -140,7 +139,6 @@ class MainActivity : AppCompatActivity() {
         fun reset() {
             // reset TextViews to start another game
             correctWordTextView.setText(getRandomFourLetterWord(wordListID))
-            println(correctWordTextView.getText())
             userWordOne.setText("")
             userWordTwo.setText("")
             userWordThree.setText("")
@@ -212,7 +210,6 @@ class MainActivity : AppCompatActivity() {
 
             // Used up all attempts
             else if (attemptCounter == 3) {
-                println("Used up all attempts")
                 Toast.makeText(this, "You've reached the maximum number of tries",
                                 Toast.LENGTH_SHORT).show()
                 correctWordTextView.visibility = View.VISIBLE
@@ -261,13 +258,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 true
             })
-
             popup.show()
         }
 
         // Beginning of game, get random word to be guessed
         correctWordTextView.setText(getRandomFourLetterWord(wordListID))
-        println(correctWordTextView.getText())
 
         filterButton.setOnClickListener{
             showPopup(filterButton)
